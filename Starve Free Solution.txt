@@ -1,0 +1,84 @@
+//Initialization
+
+Semaphore T = 1;		// used for determining either its reader's turn or writer's
+Semaphore CS = 1;		// Used for accessing critical section
+Semaphore Mutex = 1;	// Used for mutual exclusion
+
+int r_c = 0;	// For counting number of readers
+
+
+
+//Writer's Code
+
+while(true)
+{
+	//Entry Section
+	Wait(T);
+	Wait(CS);
+	Signal(T);
+
+
+	//Critical Section
+	
+
+	//Exit Section
+	Signal(CS);
+	//Remainder Section
+}
+
+
+//Reader's Code
+
+while(true)
+{
+	//Entry Section
+	Wait(T);
+	Wait(Mutex);
+	r_c++;
+	if(r_c == 1)
+		Wait(CS);
+	Signal(T);
+	Signal(Mutex);
+
+
+	//Critical Section
+
+	//Exit Section
+	Wait(Mutex);
+	r_c--;
+	if(r_c == 0)
+		Signal(CS);
+	Signal(Mutex);
+	
+	//Remainder Section
+}
+
+//Wait
+
+Wait(Semaphore S)
+{
+	S--;
+	while(S<0)
+	{
+		queue.push_back(process);
+		block();
+	}
+}
+
+//Signal
+
+Signal(Semaphore S)
+{
+	S++;
+	while(S<=0)
+	{
+		queue.pull(process);
+		awake();
+	}
+}	
+		
+	
+
+	
+
+	
